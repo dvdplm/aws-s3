@@ -98,7 +98,7 @@ module AWS
         
         # Returns the lines for the log. Each line is wrapped in a Log::Line.
         def lines
-          log.value.map {|line| Line.new(line)}
+          log.value.each_line.map {|line| Line.new(line)} # each_line is necessary for Ruby 1.9 compat
         end
         memoized :lines
         
