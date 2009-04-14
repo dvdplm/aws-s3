@@ -3,7 +3,11 @@ $:.unshift File.dirname(__FILE__) + '/../lib'
 require 'aws/s3'
 require File.dirname(__FILE__) + '/mocks/fake_response'
 require File.dirname(__FILE__) + '/fixtures'
-require_library_or_gem 'ruby-debug'
+begin
+  require_library_or_gem 'ruby-debug'
+rescue LoadError => le
+  puts "ruby-debug not installed. Coping without it."
+end
 require_library_or_gem 'flexmock'
 require_library_or_gem 'flexmock/test_unit'
 
