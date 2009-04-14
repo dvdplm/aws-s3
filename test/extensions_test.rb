@@ -1,3 +1,4 @@
+# encoding: utf-8
 require File.dirname(__FILE__) + '/test_helper'
 
 class HashExtensionsTest < Test::Unit::TestCase
@@ -166,10 +167,10 @@ class ModuleExtensionsTest < Test::Unit::TestCase
   end
   
   def test_memoize
-    assert !@instance.instance_variables.include?('@foo')
+    assert !@instance.instance_variables.map(&:to_s).include?('@foo')
     cached_result = @instance.foo
     assert_equal cached_result, @instance.foo
-    assert @instance.instance_variables.include?('@foo')
+    assert @instance.instance_variables.map(&:to_s).include?('@foo')
     assert_equal cached_result, @instance.send(:instance_variable_get, :@foo)
     assert_not_equal cached_result, new_cache = @instance.foo(:reload)
     assert_equal new_cache, @instance.foo
@@ -177,21 +178,21 @@ class ModuleExtensionsTest < Test::Unit::TestCase
   end
   
   def test_customizing_memoize_storage
-    assert !@instance.instance_variables.include?('@bar')
-    assert !@instance.instance_variables.include?('@baz')
+    assert !@instance.instance_variables.map(&:to_s).include?('@bar')
+    assert !@instance.instance_variables.map(&:to_s).include?('@baz')
     cached_result = @instance.bar
-    assert !@instance.instance_variables.include?('@bar')
-    assert @instance.instance_variables.include?('@baz')
+    assert !@instance.instance_variables.map(&:to_s).include?('@bar')
+    assert @instance.instance_variables.map(&:to_s).include?('@baz')
     assert_equal cached_result, @instance.bar
     assert_equal cached_result, @instance.send(:instance_variable_get, :@baz)
     assert_nil @instance.send(:instance_variable_get, :@bar)
   end
   
   def test_memoized
-    assert !@instance.instance_variables.include?('@quux')
+    assert !@instance.instance_variables.map(&:to_s).include?('@quux')
     cached_result = @instance.quux
     assert_equal cached_result, @instance.quux
-    assert @instance.instance_variables.include?('@quux')
+    assert @instance.instance_variables.map(&:to_s).include?('@quux')
     assert_equal cached_result, @instance.send(:instance_variable_get, :@quux)
     assert_not_equal cached_result, new_cache = @instance.quux(:reload)
     assert_equal new_cache, @instance.quux
