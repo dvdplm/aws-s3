@@ -1,3 +1,4 @@
+# encoding: utf-8
 #:stopdoc:
 
 class Hash
@@ -49,7 +50,7 @@ class String
   end unless public_method_defined? :underscore
 
   def utf8?
-    scan(/[^\x00-\xa0]/u) { |s| s.unpack('U') }
+    scan(/[^\x00-\xa0]/un) { |s| s.unpack('U') }
     true
   rescue ArgumentError
     false
@@ -58,7 +59,7 @@ class String
   # All paths in in S3 have to be valid unicode so this takes care of 
   # cleaning up any strings that aren't valid utf-8 according to String#utf8?
   def remove_extended!
-    gsub!(/[\x80-\xFF]/) { "%02X" % $&[0] }
+    gsub!(/[\x80-\xFF]/n) { "%02X" % $&[0] }
   end
   
   def remove_extended
@@ -75,11 +76,15 @@ class CoercibleString < String
   
   def coerce
     case self
-    when 'true':          true
-    when 'false':         false
+    when 'true'
+      true
+    when 'false'
+      false
     # Don't coerce numbers that start with zero
-    when  /^[1-9]+\d*$/:   Integer(self)
-    when datetime_format: Time.parse(self)
+    when  /^[1-9]+\d*$/
+      Integer(self)
+    when datetime_format
+      Time.parse(self)
     else
       self
     end
