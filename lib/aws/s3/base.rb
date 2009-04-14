@@ -226,8 +226,10 @@ module AWS #:nodoc:
         
         def method_missing(method, *args, &block)
           case
-          when attributes.has_key?(method.to_s): attributes[method.to_s]
-          when attributes.has_key?(method):      attributes[method]
+          when attributes.has_key?(method.to_s)
+            attributes[method.to_s]
+          when attributes.has_key?(method)
+            attributes[method]
           else super
           end
         end
